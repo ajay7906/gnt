@@ -29,7 +29,8 @@
 const express = require('express');
 const router = express.Router();
 const { check } = require('express-validator');
-const contactController = require('../controllers/contactController');
+ //const contactController = require('../controllers/contactController');
+ const userController = require('../controllers/userController');
 
 // Validation middleware
 const validateContact = [
@@ -55,6 +56,6 @@ const validateContact = [
 ];
 
 // Routes
-router.post('/contacts', validateContact, contactController.createContact);
+router.post('/contacts', validateContact, userController.createContact);
 
 module.exports = router;

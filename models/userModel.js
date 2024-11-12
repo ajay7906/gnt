@@ -1,4 +1,4 @@
-const db = require('../config/database');
+const db = require('../config/config');
 
 class Contact {
   static async create(contactData) {

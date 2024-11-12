@@ -1,4 +1,4 @@
-const Contact = require('../models/contactModel');
+const Contact = require('../models/userModel');
 const { sendEmail } = require('../utils/emailService');
 const { validationResult } = require('express-validator');
 
