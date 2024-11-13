@@ -53,3 +53,88 @@ exports.createContact = async (req, res) => {
     });
   }
 };
+
+
+exports.createAdmin =  async (req, res)=>{
+
+
+
+
+
+
+
+
+  
+  const { email, password } = req.body;
+
+  // Query the database to check the user's credentials
+  const query = 'SELECT * FROM users WHERE email = ? AND password = ?';
+  connection.query(query, [email, password], (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length > 0 && results[0].is_admin) {
+      // User is an admin, generate a JWT token and send it back to the client
+      const token = jwt.sign({ userId: results[0].id }, JWT_SECRET, { expiresIn: '1h' });
+      return res.json({ token: token });
+    } else {
+      // User is not an admin or the credentials are invalid
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+  });
+
+
+
+
+
+};
+
+// // Helper function to generate a session token
+// function generateSessionToken(userId) {
+//   // Implement your token generation logic here, e.g., using JWT
+//   return `token-for-user-${userId}`;
+// }
+
+
+
+
+
+
+
+
+
+// server.js
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'your_secret_key';
+
+app.post('/login', (req, res) => {
+
+
+
+
+  const { email, password } = req.body;
+
+  // Query the database to check the user's credentials
+  const query = 'SELECT * FROM users WHERE email = ? AND password = ?';
+  connection.query(query, [email, password], (error, results, fields) => {
+    if (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal server error' });
+    }
+
+    if (results.length > 0 && results[0].is_admin) {
+      // User is an admin, generate a JWT token and send it back to the client
+      const token = jwt.sign({ userId: results[0].id }, JWT_SECRET, { expiresIn: '1h' });
+      return res.json({ token: token });
+    } else {
+      // User is not an admin or the credentials are invalid
+      return res.status(401).json({ error: 'Invalid email or password' });
+    }
+  });
+
+
+
+
+});

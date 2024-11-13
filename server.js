@@ -11,6 +11,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/v1', require('./routes/userRoutes'));
+app.use('/api/v1', require('./routes/contactRoutes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
