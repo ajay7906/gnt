@@ -31,6 +31,7 @@ const router = express.Router();
 const { check } = require('express-validator');
  //const contactController = require('../controllers/contactController');
  const userController = require('../controllers/userController');
+const verifyToken = require('../middleware/verifyToken');
 
 // Validation middleware
 const validateContact = [
@@ -57,5 +58,7 @@ const validateContact = [
 
 // Routes
 router.post('/contacts', validateContact, userController.createContact);
+router.post('/userAdmin',  userController.createAdmin);
+router.get('/isAdmin', verifyToken, userController.isAdmin);
 
 module.exports = router;

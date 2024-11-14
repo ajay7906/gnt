@@ -91,11 +91,16 @@ exports.createAdmin =  async (req, res)=>{
 
 };
 
-// // Helper function to generate a session token
-// function generateSessionToken(userId) {
-//   // Implement your token generation logic here, e.g., using JWT
-//   return `token-for-user-${userId}`;
-// }
+exports.isAdmin =  async (req, res)=>{
+
+  if (!req.user.isAdmin) {
+    return res.status(403).json({ error: 'Not authorized' });
+  }
+  res.json({ message: 'Welcome to admin panel' });
+}
+
+
+
 
 
 
