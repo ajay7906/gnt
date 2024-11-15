@@ -3,18 +3,19 @@ const cors = require('cors');
 //const { getConnection } = require('./config/config');
 const connection = require('./config/config');
 const promisePool = require('./config/config');
+const multer = require('multer');
 require('dotenv').config();
 
 const app = express();
 
+app.use('/uploads', express.static('uploads'));
 
 
 
 const corsOptions = {
-  // origin: 'http://localhost:5173',
-  // Replace with your frontend URL    http://88.222.213.80:4173/
-  // origin: 'http://88.222.213.80:4173',
-  origin: ['http://88.222.213.80:4173', 'http://9672418000.shop:4173', 'http://localhost:5173'],
+ 
+  // origin: ['http://88.222.213.80:4173', 'http://9672418000.shop:4173', ''],
+  origin:'http://localhost:5173',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Authorization'],
@@ -49,6 +50,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/v1', require('./routes/userRoutes'));
+app.use('/api/v1/blog', require('./routes/postRoutes'));
 //app.use('/api/v1', require('./routes/contactRoutes'));
 
 // Error handling middleware
