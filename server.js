@@ -53,6 +53,12 @@ app.use('/api/v1', require('./routes/userRoutes'));
 app.use('/api/v1/blog', require('./routes/postRoutes'));
 //app.use('/api/v1', require('./routes/contactRoutes'));
 
+
+app.get('/health', (req, res) => {
+  res.status(200).send('Backend is healthy');
+});
+
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -62,6 +68,8 @@ app.use((err, req, res, next) => {
     error: process.env.NODE_ENV === 'development' ? err.message : undefined
   });
 });
+
+
 
 // Start server
 const PORT = process.env.PORT || 5000;
