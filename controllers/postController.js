@@ -67,18 +67,6 @@ exports.createBlogPost = async (req, res) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 // const promisePool = require('../config/config');
 
 exports.getBlogPosts = async (req, res) => {
@@ -147,6 +135,174 @@ exports.getBlogPostById = async (req, res) => {
     res.status(500).json({
       status: 'error',
       message: 'Error fetching blog post'
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'uploads/');
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, `${Date.now()}-${file.originalname}`);
+//   },
+// });
+
+// const upload = multer({ storage });
+
+// Update blog post
+exports.updateBlogPost = async (req, res) => {
+  upload.single('image')(req, res, async (err) => {
+    if (err) {
+      console.error('Multer error:', err);
+      return res.status(500).json({ error: 'Error processing the file upload' });
+    }
+
+    try {
+      const { id } = req.params;
+      const { title, description, option } = req.body;
+      
+      let imageData = null;
+      let updateQuery = 'UPDATE blog SET title = ?, description = ?, `option` = ?';
+      let queryParams = [title, description, option];
+
+      // Handle new image upload if provided
+      if (req.file) {
+        console.log('New image file:', req.file);
+        imageData = fs.readFileSync(req.file.path);
+        fs.unlinkSync(req.file.path); // Delete the temporary file
+        
+        updateQuery += ', image = ?';
+        queryParams.push(imageData);
+      }
+
+      updateQuery += ' WHERE id = ?';
+      queryParams.push(id);
+
+      // Check if post exists before updating
+      const [existingPost] = await promisePool.query(
+        'SELECT id FROM blog WHERE id = ?',
+        [id]
+      );
+
+      if (existingPost.length === 0) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Blog post not found'
+        });
+      }
+
+      const [result] = await promisePool.query(updateQuery, queryParams);
+
+      if (result.affectedRows === 0) {
+        return res.status(404).json({
+          status: 'error',
+          message: 'Blog post not found or no changes made'
+        });
+      }
+
+      res.status(200).json({
+        status: 'success',
+        message: 'Blog post updated successfully'
+      });
+
+    } catch (error) {
+      console.error('Error updating blog post:', error);
+      res.status(500).json({
+        status: 'error',
+        message: 'Error updating blog post'
+      });
+    }
+  });
+};
+
+// Delete blog post
+exports.deleteBlogPost = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if post exists before deleting
+    const [existingPost] = await promisePool.query(
+      'SELECT id FROM blog WHERE id = ?',
+      [id]
+    );
+
+    if (existingPost.length === 0) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Blog post not found'
+      });
+    }
+
+    const query = 'DELETE FROM blog WHERE id = ?';
+    const [result] = await promisePool.query(query, [id]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        status: 'error',
+        message: 'Blog post not found'
+      });
+    }
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Blog post deleted successfully'
+    });
+
+  } catch (error) {
+    console.error('Error deleting blog post:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Error deleting blog post'
     });
   }
 };
