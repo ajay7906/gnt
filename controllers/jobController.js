@@ -42,3 +42,18 @@ exports.getJobs = async (req, res) => {
         res.status(500).json({ message: 'Error fetching jobs', error: error.message });
     }
 }
+
+
+
+exports.getJobById = async (req, res) => {
+    try {
+        const [jobs] = await promisePool.query('SELECT * FROM jobs WHERE id = ?', [req.params.id]);
+        if (jobs.length === 0) {
+            return res.status(404).json({ message: 'Job not found' });
+        }
+        res.json(jobs[0]);
+    } catch (error) {
+        console.error('Error fetching job:', error);
+        res.status(500).json({ message: 'Error fetching job', error: error.message });
+    }
+}
