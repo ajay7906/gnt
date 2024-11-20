@@ -15,7 +15,7 @@ app.use('/uploads', express.static('uploads'));
 const corsOptions = {
  
   // origin: ['http://88.222.213.80:4173', 'http://9672418000.shop:4173', ''],
-  origin:'http://localhost:5173',
+  origin:['http://localhost:5173', 'https://gntindia.com'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Authorization'],
