@@ -60,7 +60,7 @@ exports.getJobById = async (req, res) => {
 
 
 
-exports.updateJobById = async (req, res) => { 
+exports.updateJobById = async (req, res) => {
     try {
         const { title, location, type, experience, department, description, skills } = req.body;
         const [result] = await promisePool.query(
@@ -76,5 +76,22 @@ exports.updateJobById = async (req, res) => {
     } catch (error) {
         console.error('Error updating job:', error);
         res.status(500).json({ message: 'Error updating job', error: error.message });
+    }
+}
+
+
+
+exports.deleteJobById = async (req, res) => {
+    try {
+        const [result] = await promisePool.query('DELETE FROM jobs WHERE id = ?', [req.params.id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Job not found' });
+        }
+
+        res.json({ message: 'Job deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting job:', error);
+        res.status(500).json({ message: 'Error deleting job', error: error.message });
     }
 }
