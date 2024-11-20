@@ -57,3 +57,24 @@ exports.getJobById = async (req, res) => {
         res.status(500).json({ message: 'Error fetching job', error: error.message });
     }
 }
+
+
+
+exports.updateJobById = async (req, res) => { 
+    try {
+        const { title, location, type, experience, department, description, skills } = req.body;
+        const [result] = await promisePool.query(
+            'UPDATE jobs SET title = ?, location = ?, type = ?, experience = ?, department = ?, description = ?, skills = ? WHERE id = ?',
+            [title, location, type, experience, department, description, JSON.stringify(skills), req.params.id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: 'Job not found' });
+        }
+
+        res.json({ message: 'Job updated successfully' });
+    } catch (error) {
+        console.error('Error updating job:', error);
+        res.status(500).json({ message: 'Error updating job', error: error.message });
+    }
+}

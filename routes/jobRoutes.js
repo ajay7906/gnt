@@ -6,5 +6,6 @@ const router = express.Router();
 router.post('/createjob', createJob);
 router.get('/getjob', getJobs);
 router.get('/getjobbyid/:id', getJobById);
+router.put('/updatejob/:id', getJobById);
 
 module.exports = router;
