@@ -16,3 +16,29 @@ exports.createJob = async (req, res) => {
         res.status(500).json({ message: 'Error creating job', error: error.message });
     }
 };
+
+
+exports.getJobs = async (req, res) => {
+
+    try {
+        const { department, location } = req.query;
+        let query = 'SELECT * FROM jobs WHERE 1=1';
+        const params = [];
+
+        if (department && department !== 'All') {
+            query += ' AND department = ?';
+            params.push(department);
+        }
+
+        if (location && location !== 'All') {
+            query += ' AND location = ?';
+            params.push(location);
+        }
+
+        const [jobs] = await promisePool.query(query, params);
+        res.json(jobs);
+    } catch (error) {
+        console.error('Error fetching jobs:', error);
+        res.status(500).json({ message: 'Error fetching jobs', error: error.message });
+    }
+}
