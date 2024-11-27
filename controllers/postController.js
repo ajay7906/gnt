@@ -137,6 +137,23 @@ exports.createBlogPost = async (req, res) => {
       try {
         const [result] = await promisePool.query(query, values);
         console.log('Database insertion result:', result);
+        
+        //check the total count 
+        const countQuery = 'SELECT COUNT(*) AS total FROM blog';
+        const [countResult] = await promisePool.query(countQuery);
+        const total = countResult[0].total;
+        console.log('Total count:', total);
+        
+
+        //if the total count is greater than 26
+        if(total > 26){
+          const deleteQuery =  'DELETE FROM blog WHERE id = ( SELECT id FROM blog ORDER BY created_at ASC LIMIT 1) )';
+          const [deleterResult] = await promisepoll.query(deleteQuery);
+          console.log('Database deletion result:', deleterResult);
+          
+        }
+        
+ 
         res.status(200).json({ message: 'Blog post saved successfully' });
       } catch (dbError) {
         console.error('Database query error:', dbError);
