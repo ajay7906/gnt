@@ -7,8 +7,8 @@ const { createBlogPost, getBlogPosts, deleteBlogPost, updateBlogPost, getBlogPos
 router.post('/createblog',  createBlogPost);
 router.get('/getblog', getBlogPosts);
 router.get('/getblogbyId/:id', getBlogPostById);
-router.delete('/deleteblog/:id', deleteBlogPost)
-router.delete('/updateblog/:id', updateBlogPost)
+router.delete('/deleteblog/:id', deleteBlogPost);
+router.delete('/updateblog/:id', updateBlogPost);
 //router.get('/deleteblog/:id', deleteBlogPost)
 // router.get('/', postController.getAllPosts);   deleteblog
 // router.get('/:id', postController.getPostById);
