@@ -5,7 +5,7 @@
 const axios = require('axios');
 const crypto = require('crypto');
 //const cors = require("cors");
-const { v4: uuidv4 } = require('uuid');
+// const { v4: uuidv4 } = require('uuid');
 
 // const app = express();
 // app.use(express.json());
@@ -18,12 +18,6 @@ const MERCHANT_ID = "GNTONLINE";
 // const MERCHANT_ID = "M22ZKINBPY7OU";
 const MERCHANT_BASE_URL = "https://api.phonepe.com/apis/hermes/pg/v1/pay";
 const MERCHANT_STATUS_URL = "https://api.phonepe.com/apis/hermes/pg/v1/status";
-
-// URLs should be absolute and point to your deployed server
-// Replace with your ngrok URL
-// const redirectUrl = "https://4916-2402-8100-2592-7d5b-c0d-cf37-3553-8f96.ngrok-free.app/status"
-// const successUrl = "https://4916-2402-8100-2592-7d5b-c0d-cf37-3553-8f96.ngrok-free.app/payment-success"
-// const failureUrl = "https://4916-2402-8100-2592-7d5b-c0d-cf37-3553-8f96.ngrok-free.app/payment-failure"
 
 
 const redirectUrl="https://gntindia.com:5000/api/v1/payment/status"
@@ -69,7 +63,7 @@ exports.createPayment = async (req, res) => {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        const orderId = uuidv4();
+        const orderId = crypto.randomUUID();
 
         const paymentPayload = {
             merchantId: MERCHANT_ID,
