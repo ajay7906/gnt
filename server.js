@@ -38,7 +38,8 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/v1', require('./routes/userRoutes'));
 app.use('/api/v1/blog', require('./routes/postRoutes'));
-app.use('/api/v1/job', require('./routes/jobRoutes'));
+app.use('/api/v1/payment', require('./routes/paymentRoutes'));
+
 
 // Health Check Route
 app.get('/health', (req, res) => {
@@ -55,14 +56,17 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Load SSL certificates
-const sslOptions = {
-  key: fs.readFileSync('/etc/letsencrypt/live/gntindia.com/privkey.pem'), // Path to private key
-  cert: fs.readFileSync('/etc/letsencrypt/live/gntindia.com/fullchain.pem'), // Path to full chain certificate
-};
+// // Load SSL certificates
+// const sslOptions = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/gntindia.com/privkey.pem'), // Path to private key
+//   cert: fs.readFileSync('/etc/letsencrypt/live/gntindia.com/fullchain.pem'), // Path to full chain certificate
+// };
 
 // Start HTTPS server
 const PORT = process.env.PORT || 5000;
-https.createServer(sslOptions, app).listen(PORT, () => {
-  console.log(`Secure server is running on https://gntindia.com:${PORT}`);
+// https.createServer(sslOptions, app).listen(PORT, () => {
+//   console.log(`Secure server is running on https://gntindia.com:${PORT}`);
+// });
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
