@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/v1', require('./routes/userRoutes'));
 app.use('/api/v1/blog', require('./routes/postRoutes'));
-app.use('/api/v1/payment', require('./routes/paymentRoutes'));
+// app.use('/api/v1/payment', require('./routes/paymentRoutes'));
 
 
 // Health Check Route
