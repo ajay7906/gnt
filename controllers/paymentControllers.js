@@ -4,12 +4,7 @@
 // const express = require('express');
 const axios = require('axios');
 const crypto = require('crypto');
-//const cors = require("cors");
-// const { v4: uuidv4 } = require('uuid');
 
-// const app = express();
-// app.use(express.json());
-// app.use(cors());
 
 // Constants
 const MERCHANT_KEY = "f778d572-37b5-469a-aaec-8bce837a28f7";
@@ -130,6 +125,7 @@ exports.successPaymentControllers = async (req, res) =>{
 
     try {
         const merchantTransactionId = req.query.id;
+        console.log(merchantTransactionId);
         
         if (!merchantTransactionId) {
             return res.status(400).json({ error: 'Transaction ID is required' });
