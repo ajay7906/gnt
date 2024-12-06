@@ -28,6 +28,7 @@ const corsOptions = {
 
 
 // app.use(cors(corsOptions));
+app.use(cors(corsOptions));
 app.options('*', cors(corsOptions)); // Preflight requests
 
 
