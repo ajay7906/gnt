@@ -18,13 +18,24 @@ const app = express();
 app.use('/uploads', express.static('uploads'));
 
 // CORS Configuration
+
+
+// const corsOptions = {
+//   origin: ['http://localhost:5173', 'https://gntindia.com', 'http://gntindia.com'],
+//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+//   allowedHeaders: ['Content-Type', 'Authorization'],
+//   exposedHeaders: ['Authorization'],
+//   credentials: true,
+// };
 const corsOptions = {
-  origin: ['http://localhost:5173', 'https://gntindia.com', 'http://gntindia.com'],
+  origin: ['http://localhost:5173', 'https://gntindia.com', 'http://gntindia.com', 'https://www.gntindia.com'], // Added 'https://www.gntindia.com'
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   exposedHeaders: ['Authorization'],
   credentials: true,
 };
+app.use(cors(corsOptions));
+
 
 
 // app.use(cors(corsOptions));
