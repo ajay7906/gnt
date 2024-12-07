@@ -6,6 +6,6 @@ const router = express.Router();
 router.post('/create-payment', createPayment);
 router.post('/status', successPaymentControllers);
 router.post('/paymentOrder', createPaymentForOrder);
-router.post('paymentOrderStatus' , successPaymentForOrder);
+router.post('/paymentOrderStatus' , successPaymentForOrder);
 
 module.exports = router;
