@@ -30,7 +30,7 @@ app.use('/uploads', express.static('uploads'));
 const corsOptions = {
   origin: ['http://localhost:5173', 'https://gntindia.com', 'http://gntindia.com', 'https://www.gntindia.com'], // Added 'https://www.gntindia.com'
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization'],   
   exposedHeaders: ['Authorization'],
   credentials: true,
 };
@@ -50,7 +50,8 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/api/v1', require('./routes/userRoutes'));
 app.use('/api/v1/blog', require('./routes/postRoutes'));
- app.use('/api/v1/payment', require('./routes/paymentRoutes'));
+app.use('/api/v1/payment', require('./routes/paymentRoutes'));
+app.use('/api/v1/job', require('./routes/jobRoutes'));
 
 
 // Health Check Route
