@@ -21,8 +21,8 @@ const MERCHANT_STATUS_URL = "https://api.phonepe.com/apis/hermes/pg/v1/status";
 
 const redirectUrl="https://gntindia.com:5000/api/v1/payment/status"
 
-const successUrl="http://localhost:5173/payment-success"
-const failureUrl="http://localhost:5173/payment-failure"
+const successUrl="https://gntindia.com/success"
+const failureUrl="https://gntindia.com/failure"
 
 // Helper function to generate checksum
 const generateChecksum = (payload, endpoint) => {
