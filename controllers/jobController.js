@@ -1,8 +1,10 @@
 const multer = require('multer');
 const promisePool = require('../config/config');
+const fs = require('fs');
+const path = require('path'); 
 
 exports.createJob = async (req, res) => {
-    try {
+    try { 
         const { title, location, type, experience, department, description, skills } = req.body;
         const [result] = await promisePool.query(
             'INSERT INTO jobs (title, location, type, experience, department, description, skills) VALUES (?, ?, ?, ?, ?, ?, ?)',
