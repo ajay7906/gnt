@@ -64,6 +64,42 @@ exports.createPayment = async (req, res) => {
 
         const orderId = crypto.randomUUID();
 
+
+
+
+
+
+
+
+
+        db.query(
+            'INSERT INTO payments (name, mobile_number, amount, transaction_id) VALUES (?, ?, ?, ?)',
+            [name, mobileNumber, amount, orderId],
+            (err, result) => {
+                if (err) {
+                    console.error("Database Error:", err);
+                    return res.status(500).json({ error: 'Database error' });
+                }
+
+                console.log("Payment record inserted:", result.insertId);
+            }
+        );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         const paymentPayload = {
             merchantId: MERCHANT_ID,
             merchantUserId: `USER_${name.replace(/\s+/g, '_').toUpperCase()}`,
