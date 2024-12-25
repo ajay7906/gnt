@@ -2,6 +2,7 @@ const multer = require('multer');
 const promisePool = require('../config/config');
 const fs = require('fs');
 const path = require('path'); 
+const nodemailer = require('nodemailer')
 
 exports.createJob = async (req, res) => {
     try { 
