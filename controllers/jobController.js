@@ -223,7 +223,75 @@ exports.applyJob = async (req, res) => {
           req.body.jobTitle
         ]
       );
-  
+
+
+
+
+
+
+
+       // Configure Nodemailer
+       const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+            user: 'Fin.hpcpl@gmail.com', // Server email (sending email)
+            pass: 'toyt mzdo rviq bxtd'              // Password for the server email
+        }
+    });
+
+    // Email content
+    const mailOptions = {
+        from: 'Fin.hpcpl@gmail.com', // Server email used to send
+        to: 'Fin.hpcpl@gmail.com',         // Company's email
+        replyTo: req.body.email,           // Applicant's email for reply
+        subject: `New Job Application for ${req.body.jobTitle}`,
+        text: `
+            Hello,
+
+            A new job application has been received. Here are the details:
+
+            Full Name: ${req.body.fullName}
+            Email: ${req.body.email}
+            Phone: ${req.body.phone}
+            LinkedIn URL: ${req.body.linkedin || 'N/A'}
+            Experience: ${req.body.experience}
+            Portfolio URL: ${req.body.portfolio || 'N/A'}
+            Job Title: ${req.body.jobTitle}
+
+            The resume is attached to this email.
+
+            Best regards,
+            Your Application System
+        `,
+        attachments: [
+            {
+                filename: path.basename(req.file.path),
+                path: req.file.path
+            }
+        ]
+    };
+
+    // Send email
+    await transporter.sendMail(mailOptions);
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+
+
       // Send success response
       res.status(201).json({
         success: true,
