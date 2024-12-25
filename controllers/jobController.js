@@ -190,12 +190,12 @@ exports.applyJob = async (req, res) => {
       try { 
         console.log(req.body.phone);
         
-        const whatsappResponse = await fetch(
-          `https://whatsapp.gntindia.com/api/sendtextmessage.php?LicenseNumber=47757954399&APIKey=GfeYz42caOWXL7xhkjD5C8BHt&Contact=91${req.body.phone}&Message=Thank you for applying! We've received your application and are excited to review it. Our team will be in touch soon if you're shortlisted. Got questions? Reach us anytime at fin.hpcpl@gmail.com. Best of luck, Team GNT India`
-        );
-        if (!whatsappResponse.ok) {
-          console.error('WhatsApp notification failed');
-        }
+        // const whatsappResponse = await fetch(
+        //   `https://whatsapp.gntindia.com/api/sendtextmessage.php?LicenseNumber=47757954399&APIKey=GfeYz42caOWXL7xhkjD5C8BHt&Contact=91${req.body.phone}&Message=Thank you for applying! We've received your application and are excited to review it. Our team will be in touch soon if you're shortlisted. Got questions? Reach us anytime at fin.hpcpl@gmail.com. Best of luck, Team GNT India`
+        // );
+        // if (!whatsappResponse.ok) {
+        //   console.error('WhatsApp notification failed');
+        // }
       } catch (whatsappError) {
         console.error('Error sending WhatsApp notification:', whatsappError);
       }
