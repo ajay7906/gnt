@@ -1,6 +1,6 @@
-
+const jwt = require('jsonwebtoken')
 const promisePool = require('../config/config');
-
+const bcrypt = require('bcrypt')
 exports.adminEmployeeLogin = async (req, res)=>{
     
     
@@ -52,7 +52,7 @@ exports.createEmployeeection = async (req, res)=>{
         const { first_name, last_name, email, password, phone } = req.body;
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const [result] = await pool.execute(
+        const [result] = await promisePool.execute(
             'INSERT INTO employees (first_name, last_name, email, password, phone, created_by) VALUES (?, ?, ?, ?, ?, ?)',
             [first_name, last_name, email, hashedPassword, phone, req.user.id]
         );
@@ -70,7 +70,7 @@ exports.createEmployeeection = async (req, res)=>{
 
 exports.getAllEmployees  = async (req, res)=>{
     try {
-        const [employees] = await pool.execute('SELECT * FROM employees');
+        const [employees] = await promisePool.execute('SELECT * FROM employees');
         res.json(employees);
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
@@ -80,7 +80,7 @@ exports.getAllEmployees  = async (req, res)=>{
 
 exports.getAllTaks = async (req, res)=>{
     try {
-        const [tasks] = await pool.execute('SELECT * FROM tasks');
+        const [tasks] = await promisePool.execute('SELECT * FROM tasks');
         res.json(tasks);
         
     } catch (error) {
@@ -91,7 +91,7 @@ exports.getAllTaks = async (req, res)=>{
 
 exports.getEmployeeTask = async (req, res)=>{
     try {
-        const [tasks] = await pool.execute(
+        const [tasks] = await promisePool.execute(
             `SELECT t.*, et.assigned_at 
              FROM tasks t 
              JOIN employee_tasks et ON t.task_id = et.task_id 
@@ -110,7 +110,7 @@ exports.createTask =  async (req, res)=>{
     try {
         const { title, description, priority, deadline } = req.body;
 
-        const [result] = await pool.execute(
+        const [result] = await promisePool.execute(
             'INSERT INTO tasks (title, description, priority, deadline, created_by) VALUES (?, ?, ?, ?, ?)',
             [title, description, priority, deadline, req.user.id]
         );
@@ -132,7 +132,7 @@ exports.assignTaskEmployee = async (req, res)=>{
         console.log(req.user.id, task_id, employee_ids);
         
 
-        const connection = await pool.getConnection();
+        const connection = await promisePool.getConnection();
         await connection.beginTransaction();
 
         try {
@@ -161,7 +161,7 @@ exports.updateTaskToEmployee = async (req, res)=>{
     try {
         const { task_id, status } = req.body;
 
-        await pool.execute(
+        await promisePool.execute(
             'UPDATE tasks SET status = ? WHERE task_id = ?',
             [status, task_id]
         );
