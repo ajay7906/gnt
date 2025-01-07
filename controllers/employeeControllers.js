@@ -10,7 +10,7 @@ exports.adminEmployeeLogin = async (req, res)=>{
        
 
         const [users] = await promisePool.execute(
-            `SELECT * FROM admins WHERE email = ?`,
+            `SELECT * FROM adminsEmployee WHERE email = ?`,
             [email]
         );
         console.log(users);
