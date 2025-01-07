@@ -2,20 +2,20 @@ const jwt = require('jsonwebtoken')
 const promisePool = require('../config/config');
 const bcrypt = require('bcrypt') 
 const secret = 'abcd12'; 
-const config = require('../config/config');
+const jwtConfig = require('../config/jwt')
 exports.adminEmployeeLogin = async (req, res)=>{
     
     
     try {
         const { email, password } = req.body;
-       console.log(  config.jwt.secret);
+       console.log(  jwtConfig.jwt.secret);
        
 
         const [users] = await promisePool.execute(
             `SELECT * FROM adminsEmployee WHERE email = ?`,
             [email]
         );
-        console.log(users);
+      
         
 
         if (users.length === 0) {
@@ -36,7 +36,7 @@ exports.adminEmployeeLogin = async (req, res)=>{
        
         const token = jwt.sign(
             { id: user.admin_id }, // Use admin_id as the identifier
-            config.jwt.secret,
+            jwtConfig.jwt.secret,
             { expiresIn: '24h' }  
         );
 

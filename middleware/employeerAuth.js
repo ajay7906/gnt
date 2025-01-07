@@ -1,4 +1,4 @@
-const jwtConfig = require('../config/config')
+const jwtConfig = require('../config/jwt')
 const employeerAuth = async (req, res, next) => {
     try { 
         //handle the token with bearer
