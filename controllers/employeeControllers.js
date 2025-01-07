@@ -8,6 +8,7 @@ exports.adminEmployeeLogin = async (req, res)=>{
     
     try {
         const { email, password } = req.body;
+       console.log(  config.jwt.secret);
        
 
         const [users] = await promisePool.execute(
