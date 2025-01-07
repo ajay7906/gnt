@@ -1,6 +1,6 @@
 const express = require('express');
 const { adminEmployeeLogin, createEmployeeection, getAllEmployees, getAllTaks, getEmployeeTask, createTask, assignTaskEmployee, updateTaskToEmployee } = require('../controllers/employeeControllers');
-const empployeerAuth = require('../middleware/employeerAuth')
+const employeerAuth = require('../middleware/employeerAuth')
 const router  = express.Router();
 
 router.post('/adminemployee/login',  adminEmployeeLogin);
