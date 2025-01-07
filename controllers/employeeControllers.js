@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken')
 const promisePool = require('../config/config');
 const bcrypt = require('bcrypt') 
-const secret = 'abcd12';
+const secret = 'abcd12'; 
+const config = require('../config/config');
 exports.adminEmployeeLogin = async (req, res)=>{
     
     
@@ -34,7 +35,7 @@ exports.adminEmployeeLogin = async (req, res)=>{
        
         const token = jwt.sign(
             { id: user.admin_id }, // Use admin_id as the identifier
-            secret,
+            config.jwt.secret,
             { expiresIn: '24h' }  
         );
 
