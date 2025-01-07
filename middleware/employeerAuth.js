@@ -2,6 +2,7 @@
 const employeerAuth = async (req, res, next) => {
     try { 
         //handle the token with bearer
+        const secret = 'abcd12';
         const token = req.headers.authorization.split(' ')[1]; 
         console.log(token);
         
