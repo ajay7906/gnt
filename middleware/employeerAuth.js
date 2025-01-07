@@ -18,4 +18,4 @@ const employeerAuth = async (req, res, next) => {
 };   
 
 
-module.export = employeerAuth;
+module.exports = employeerAuth;
