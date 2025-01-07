@@ -3,7 +3,7 @@ const { adminEmployeeLogin, createEmployeeection, getAllEmployees, getAllTaks, g
 const employeerAuth = require('../middleware/employeerAuth')
 const router  = express.Router();
 
-router.post('/adminemployee/login',  adminEmployeeLogin);
+router.post('/adminsemployee/login',  adminEmployeeLogin);
 router.post('/admins/createEmployee',employeerAuth, createEmployeeection);
 router.get('/admins/allemplyees',employeerAuth, getAllEmployees);
 router.get('/admins/getalltask',employeerAuth, getAllTaks);

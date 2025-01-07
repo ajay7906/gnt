@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken')
 const promisePool = require('../config/config');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt') 
+const secret = 'abcd12';
 exports.adminEmployeeLogin = async (req, res)=>{
     
     
