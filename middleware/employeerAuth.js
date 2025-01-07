@@ -2,6 +2,8 @@ const jwtConfig = require('../config/jwt')
 const employeerAuth = async (req, res, next) => {
     try { 
         //handle the token with bearer
+        console.log(jwtConfig.jwt.secret);
+        
         const secret = 'abcd12';
         const token = req.headers.authorization.split(' ')[1]; 
         console.log(token);
