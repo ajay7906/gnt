@@ -138,6 +138,9 @@ exports.getEmployeeTask = async (req, res)=>{
 exports.createTask = async (req, res) => {
     try {
         const { title, description, priority, deadline } = req.body;
+         // Log the destructured values
+         console.log('Destructured values:', { title, description, priority, dueDate }); // Log the destructured values
+        
         
         // Validate required fields
         if (!title) {
