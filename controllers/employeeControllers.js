@@ -109,13 +109,60 @@ exports.getEmployeeTask = async (req, res)=>{
 }
 
 
-exports.createTask =  async (req, res)=>{
+// exports.createTask =  async (req, res)=>{
+//     try {
+//         const { title, description, priority, deadline } = req.body;
+
+//         const [result] = await promisePool.execute(
+//             'INSERT INTO tasks (title, description, priority, deadline, created_by) VALUES (?, ?, ?, ?, ?)',
+//             [title, description, priority, deadline, req.user.id]
+//         );
+
+//         res.status(201).json({
+//             message: 'Task created successfully',
+//             task_id: result.insertId
+//         });
+//     } catch (error) {
+//         res.status(500).json({ message: 'Server error' });
+//     }
+// } 
+
+
+
+
+
+
+
+
+
+exports.createTask = async (req, res) => {
     try {
         const { title, description, priority, deadline } = req.body;
+        
+        // Validate required fields
+        if (!title) {
+            return res.status(400).json({ message: 'Title is required' });
+        }
+
+        // Validate priority enum values
+        const validPriorities = ['low', 'medium', 'high'];
+        if (priority && !validPriorities.includes(priority)) {
+            return res.status(400).json({ message: 'Invalid priority value' });
+        }
+
+        // Validate deadline format
+        if (deadline && !isValidDate(deadline)) {
+            return res.status(400).json({ message: 'Invalid deadline format' });
+        }
+
+        // Check if user is authenticated
+        // if (!req.user || !req.user.id) {
+        //     return res.status(401).json({ message: 'User not authenticated' });
+        // }
 
         const [result] = await promisePool.execute(
             'INSERT INTO tasks (title, description, priority, deadline, created_by) VALUES (?, ?, ?, ?, ?)',
-            [title, description, priority, deadline, req.user.id]
+            [title, description, priority || 'medium', deadline, req.user.id]
         );
 
         res.status(201).json({
@@ -123,9 +170,35 @@ exports.createTask =  async (req, res)=>{
             task_id: result.insertId
         });
     } catch (error) {
-        res.status(500).json({ message: 'Server error' });
+        console.error('Task creation error:', error);  // Add this line for debugging
+        res.status(500).json({ 
+            message: 'Server error',
+            error: error.message  // Add this in development environment only
+        });
     }
+};
+
+// Helper function to validate date
+function isValidDate(dateString) {
+    const date = new Date(dateString);
+    return date instanceof Date && !isNaN(date);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
