@@ -173,7 +173,7 @@ exports.createTask = async (req, res) => {
             title,
             description || null,  // If description is undefined, use null
             normalizedPriority,
-            deadline || null,     // If dueDate is undefined, use null
+            deadline || null,     // If  is undefined, use null
             req.user.id
         ];
 
