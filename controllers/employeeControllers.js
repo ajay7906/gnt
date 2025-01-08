@@ -139,7 +139,7 @@ exports.createTask = async (req, res) => {
     try {
         const { title, description, priority, deadline } = req.body;
          // Log the destructured values
-         console.log('Destructured values:', { title, description, priority, dueDate }); // Log the destructured values
+         console.log('Destructured values:', { title, description, priority, deadline }); // Log the destructured values
         
         
         // Validate required fields
@@ -173,7 +173,7 @@ exports.createTask = async (req, res) => {
             title,
             description || null,  // If description is undefined, use null
             normalizedPriority,
-            dueDate || null,     // If dueDate is undefined, use null
+            deadline || null,     // If dueDate is undefined, use null
             req.user.id
         ];
 
