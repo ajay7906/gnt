@@ -145,8 +145,15 @@ exports.createTask = async (req, res) => {
         }
 
         // Validate priority enum values
+        // const validPriorities = ['low', 'medium', 'high'];
+        // if (priority && !validPriorities.includes(priority)) {
+        //     return res.status(400).json({ message: 'Invalid priority value' });
+        // }
+        // Validate and normalize priority case
         const validPriorities = ['low', 'medium', 'high'];
-        if (priority && !validPriorities.includes(priority)) {
+        const normalizedPriority = priority ? priority.toLowerCase() : 'medium';
+        
+        if (!validPriorities.includes(normalizedPriority)) {
             return res.status(400).json({ message: 'Invalid priority value' });
         }
 
