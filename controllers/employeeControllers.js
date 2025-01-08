@@ -168,11 +168,22 @@ exports.createTask = async (req, res) => {
         // Check if user is authenticated
         // if (!req.user || !req.user.id) {
         //     return res.status(401).json({ message: 'User not authenticated' });
-        // }
+        // }  
+        const queryParams = [
+            title,
+            description || null,  // If description is undefined, use null
+            normalizedPriority,
+            dueDate || null,     // If dueDate is undefined, use null
+            req.user.id
+        ];
+
+        // Log the final query parameters
+        console.log('Query parameters:', queryParams);
 
         const [result] = await promisePool.execute(
             'INSERT INTO tasks (title, description, priority, deadline, created_by) VALUES (?, ?, ?, ?, ?)',
-            [title, description, priority || 'medium', deadline, req.user.id]
+            // [title, description, priority || 'medium', deadline, req.user.id]
+            queryParams
         );
 
         res.status(201).json({
