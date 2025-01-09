@@ -253,7 +253,8 @@ exports.applyJob = async (req, res) => {
 
             Full Name: ${req.body.fullName}
             Email: ${req.body.email}
-            Phone: ${req.body.phone}
+            Phone: ${req.body.phone} 
+            Location:${req.body.Location}
             LinkedIn URL: ${req.body.linkedin || 'N/A'}
             Experience: ${req.body.experience}
             Portfolio URL: ${req.body.portfolio || 'N/A'}
