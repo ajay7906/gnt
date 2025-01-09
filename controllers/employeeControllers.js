@@ -209,6 +209,58 @@ function isValidDate(dateString) {
 
 
 
+//employee login
+// Employee login specific endpoint (alternative approach)
+exports.employeeLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        // Get employee from database
+        const [employees] = await promisePool.execute(
+            `SELECT * FROM employees WHERE email = ?`,
+            [email]
+        );
+
+        if (employees.length === 0) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        const employee = employees[0];
+
+        // Verify password
+        const passwordMatch = await bcrypt.compare(password, employee.password);
+        if (!passwordMatch) {
+            return res.status(401).json({ message: 'Invalid credentials' });
+        }
+
+        // Generate token
+        const token = jwt.sign(
+            {
+                id: employee.employee_id,
+                role: 'employee',
+                email: employee.email
+            },
+            jwtConfig.jwt.secret,
+            { expiresIn: '24h' }
+        );
+
+        // Send response
+        res.json({
+            token,
+            user: {
+                id: employee.employee_id,
+                email: employee.email,
+                role: 'employee',
+                firstName: employee.first_name,
+                lastName: employee.last_name
+            }
+        });
+
+    } catch (error) {
+        console.error('Employee login error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
 
 
 
