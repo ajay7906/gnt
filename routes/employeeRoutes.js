@@ -40,13 +40,15 @@ const {
     getEmployeeTask, 
     createTask, 
     assignTaskEmployee, 
-    updateTaskToEmployee 
+    updateTaskToEmployee, 
+    employeeLogin
 } = require('../controllers/employeeControllers');
 const employeerAuth = require('../middleware/employeerAuth');
 const router = express.Router();
 
 // Ensure all controller functions are properly exported and are functions
 router.post('/adminsemployee/login', adminEmployeeLogin);
+router.post('/admins/employeelogin', employeeLogin)
 router.post('/admins/createEmployee', employeerAuth, createEmployeeection);
 router.get('/admins/allemplyees', employeerAuth, getAllEmployees);
 router.get('/admins/getalltask', employeerAuth, getAllTaks);
