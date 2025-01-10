@@ -81,15 +81,102 @@ exports.getAllEmployees  = async (req, res)=>{
 }
 
 
+// exports.getAllTaks = async (req, res)=>{
+//     try {
+//         const [tasks] = await promisePool.execute('SELECT * FROM tasks');
+//         res.json(tasks);
+        
+//     } catch (error) {
+//         res.status(500).json({message:'Server Error'}) 
+//     }
+// }
+
 exports.getAllTaks = async (req, res)=>{
     try {
-        const [tasks] = await promisePool.execute('SELECT * FROM tasks');
-        res.json(tasks);
-        
+        console.log('Query Params:', req.query);
+
+        // Check if 'all' parameter is passed in the query
+        const showAll = req.query.all === 'true';
+
+        if (showAll) {
+            const [tasks] = await pool.execute('SELECT * FROM tasks');
+            return res.json({ tasks, totalTasks: tasks.length });
+        }
+
+        // Extract page and limit from query parameters, defaulting to 1 and 7
+        const page = parseInt(req.query.page, 10) || 1;
+        const limit = parseInt(req.query.limit, 10) || 7;
+
+        // Calculate offset for pagination
+        const offset = (page - 1) * limit;
+
+
+        // Use the values directly in the query string instead of prepared statements
+        const [tasks] = await pool.execute(
+            `SELECT * FROM tasks LIMIT ${limit} OFFSET ${offset}`
+        );
+
+        const [[{ count: totalTasks }]] = await pool.execute(
+            'SELECT COUNT(*) as count FROM tasks'
+        );
+
+        console.log({ tasks, totalTasks });
+
+        // Send response with tasks and pagination metadata
+        res.json({
+            tasks,
+            totalTasks,
+            totalPages: Math.ceil(totalTasks / limit),
+            currentPage: page,
+        });
     } catch (error) {
-        res.status(500).json({message:'Server Error'}) 
+        console.error('Server Error:', error);
+        res.status(500).json({ message: 'Server Error' });
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 exports.getEmployeeTask = async (req, res)=>{
