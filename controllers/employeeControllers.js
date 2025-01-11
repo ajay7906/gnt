@@ -390,7 +390,7 @@ exports.assignTaskEmployee = async (req, res)=>{
         } catch (error) {
             await connection.rollback();
             throw error;
-        } finally {
+        } finally {     
             connection.release();
         }
     } catch (error) {
