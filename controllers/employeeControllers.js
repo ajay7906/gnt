@@ -89,17 +89,23 @@ exports.getAllEmployees  = async (req, res)=>{
 //     } catch (error) {
 //         res.status(500).json({message:'Server Error'}) 
 //     }
-// }
+// }  
+
+
+
+
+
 
 exports.getAllTaks = async (req, res)=>{
-    try {
-        console.log('Query Params:', req.query);
+    try { 
+
+        
 
         // Check if 'all' parameter is passed in the query
         const showAll = req.query.all === 'true';
 
         if (showAll) {
-            const [tasks] = await pool.execute('SELECT * FROM tasks');
+            const [tasks] = await promisePool.execute('SELECT * FROM tasks');
             return res.json({ tasks, totalTasks: tasks.length });
         }
 
@@ -112,11 +118,11 @@ exports.getAllTaks = async (req, res)=>{
 
 
         // Use the values directly in the query string instead of prepared statements
-        const [tasks] = await pool.execute(
+        const [tasks] = await promisePool.execute(
             `SELECT * FROM tasks LIMIT ${limit} OFFSET ${offset}`
         );
 
-        const [[{ count: totalTasks }]] = await pool.execute(
+        const [[{ count: totalTasks }]] = await promisePool.execute(
             'SELECT COUNT(*) as count FROM tasks'
         );
 
