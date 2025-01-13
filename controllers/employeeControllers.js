@@ -412,4 +412,224 @@ exports.updateTaskToEmployee = async (req, res)=>{
     } catch (error) {
         res.status(500).json({ message: 'Server error' });
     }
-}
+}  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Import required modules
+const promisePool = require('../config/config');
+
+// Controller for handling completed task responses
+exports.submitCompletedTask = async (req, res) => {
+    const connection = await promisePool.getConnection();
+    
+    try {
+        await connection.beginTransaction();
+
+        // Extract data from request body
+        const {
+            company_name,
+            name,
+            current_location,
+            phone_number,
+            category,
+            value,
+            plan,
+            employee_id,
+            task_id
+        } = req.body;
+
+        // Insert into task_responses table
+        const [responseResult] = await connection.execute(
+            `INSERT INTO task_responses 
+            (company_name, name, current_location, phone_number, response_type, employee_id, task_id) 
+            VALUES (?, ?, ?, ?, 'completed', ?, ?)`,
+            [company_name, name, current_location, phone_number, employee_id, task_id]
+        );
+
+        // Insert into completed_responses table
+        await connection.execute(
+            `INSERT INTO completed_responses 
+            (response_id, category, value, plan) 
+            VALUES (?, ?, ?, ?)`,
+            [responseResult.insertId, category, value, plan]
+        );
+
+        // Update task status if task_id is provided
+        if (task_id) {
+            await connection.execute(
+                'UPDATE tasks SET status = "completed" WHERE task_id = ?',
+                [task_id]
+            );
+        }
+
+        await connection.commit();
+        res.status(201).json({
+            message: 'Completed task response submitted successfully',
+            response_id: responseResult.insertId
+        });
+
+    } catch (error) {
+        await connection.rollback();
+        console.error('Submit completed task error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    } finally {
+        connection.release();
+    }
+};
+
+// Controller for handling incomplete task responses
+exports.submitIncompleteTask = async (req, res) => {
+    const connection = await promisePool.getConnection();
+    
+    try {
+        await connection.beginTransaction();
+
+        // Extract data from request body
+        const {
+            company_name,
+            name,
+            mobile: phone_number,
+            current_location,
+            incompleted_regions,
+            scheduled_date,
+            employee_id,
+            task_id
+        } = req.body;
+
+        // Insert into task_responses table
+        const [responseResult] = await connection.execute(
+            `INSERT INTO task_responses 
+            (company_name, name, current_location, phone_number, response_type, employee_id, task_id) 
+            VALUES (?, ?, ?, ?, 'incomplete', ?, ?)`,
+            [company_name, name, current_location, phone_number, employee_id, task_id]
+        );
+
+        // Insert into incomplete_responses table
+        await connection.execute(
+            `INSERT INTO incomplete_responses 
+            (response_id, incompleted_regions, scheduled_date) 
+            VALUES (?, ?, ?)`,
+            [responseResult.insertId, incompleted_regions, scheduled_date]
+        );
+
+        // Update task status if task_id is provided
+        if (task_id) {
+            await connection.execute(
+                'UPDATE tasks SET status = "incomplete" WHERE task_id = ?',
+                [task_id]
+            );
+        }
+
+        await connection.commit();
+        res.status(201).json({
+            message: 'Incomplete task response submitted successfully',
+            response_id: responseResult.insertId
+        });
+
+    } catch (error) {
+        await connection.rollback();
+        console.error('Submit incomplete task error:', error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    } finally {
+        connection.release();
+    }
+};
+
+// Get all completed task responses
+exports.getCompletedResponses = async (req, res) => {
+    try {
+        const [responses] = await promisePool.execute(`
+            SELECT * FROM vw_completed_tasks
+            ORDER BY created_at DESC
+        `);
+        
+        res.json(responses);
+    } catch (error) {
+        console.error('Get completed responses error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Get all incomplete task responses
+exports.getIncompleteResponses = async (req, res) => {
+    try {
+        const [responses] = await promisePool.execute(`
+            SELECT * FROM vw_incomplete_tasks
+            ORDER BY created_at DESC
+        `);
+        
+        res.json(responses);
+    } catch (error) {
+        console.error('Get incomplete responses error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Get response by ID
+exports.getResponseById = async (req, res) => {
+    try {
+        const { responseId } = req.params;
+        
+        const [[response]] = await promisePool.execute(`
+            SELECT * FROM task_responses WHERE response_id = ?
+        `, [responseId]);
+
+        if (!response) {
+            return res.status(404).json({ message: 'Response not found' });
+        }
+
+        let details;
+        if (response.response_type === 'completed') {
+            [[details]] = await promisePool.execute(`
+                SELECT * FROM completed_responses WHERE response_id = ?
+            `, [responseId]);
+        } else if (response.response_type === 'incomplete') {
+            [[details]] = await promisePool.execute(`
+                SELECT * FROM incomplete_responses WHERE response_id = ?
+            `, [responseId]);
+        }
+
+        res.json({
+            ...response,
+            details
+        });
+    } catch (error) {
+        console.error('Get response by ID error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Get responses by company name
+exports.getResponsesByCompany = async (req, res) => {
+    try {
+        const { companyName } = req.params;
+        
+        const [responses] = await promisePool.execute(`
+            SELECT * FROM task_responses 
+            WHERE company_name LIKE ?
+            ORDER BY created_at DESC
+        `, [`%${companyName}%`]);
+
+        res.json(responses);
+    } catch (error) {
+        console.error('Get responses by company error:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
