@@ -41,7 +41,9 @@ const {
     createTask, 
     assignTaskEmployee, 
     updateTaskToEmployee, 
-    employeeLogin
+    employeeLogin,
+    submitCompletedTask,
+    submitIncompleteTask
 } = require('../controllers/employeeControllers');
 const employeerAuth = require('../middleware/employeerAuth');
 const router = express.Router();
@@ -56,5 +58,6 @@ router.get('/admins/getemployeetask', employeerAuth, getEmployeeTask);
 router.post('/admins/createtask', employeerAuth, createTask);
 router.post('/admins/assigntask', employeerAuth, assignTaskEmployee); // Fixed typo in route path
 router.put('/admins/updatetask/:id', employeerAuth, updateTaskToEmployee);
-
+router.post('/admins/completetask',employeerAuth, submitCompletedTask);
+router.post('/admins/incomplete',employeerAuth, submitIncompleteTask);
 module.exports = router;

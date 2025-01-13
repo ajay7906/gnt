@@ -432,9 +432,6 @@ exports.updateTaskToEmployee = async (req, res)=>{
 
 
 
-// Import required modules
-const promisePool = require('../config/config');
-
 // Controller for handling completed task responses
 exports.submitCompletedTask = async (req, res) => {
     const connection = await promisePool.getConnection();
